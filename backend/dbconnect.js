@@ -4,7 +4,13 @@ require('dotenv').config();
 
 const connectDB = async () => {
     try {
-        await mongoose.connect(process.env.MONGODB_URI);
+        const uri = process.env.MONGODB_URI;
+        if (!uri || typeof uri !== 'string' || uri.trim() === '') {
+            console.error('Missing MONGODB_URI environment variable. Set it in .env or your deployment environment.');
+            throw new Error('MONGODB_URI is required');
+        }
+
+        await mongoose.connect(uri);
         console.log('MongoDB connected successfully');
 
         // Seed initial user if none exists

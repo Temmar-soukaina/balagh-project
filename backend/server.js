@@ -23,6 +23,11 @@ app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'dist', 'index.html'));
 });
 
-app.listen(PORT, () => {
-    console.log(`Server is running on port http://localhost:${PORT}`);
-});
+// In serverless environments (e.g., Vercel), export the app.
+if (process.env.VERCEL) {
+    module.exports = app;
+} else {
+    app.listen(PORT, () => {
+        console.log(`Server is running on port ${PORT}`);
+    });
+}
